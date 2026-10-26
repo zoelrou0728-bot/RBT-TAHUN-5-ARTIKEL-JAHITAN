@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mari Mengenal Artikel Jahitan - RBT Tahun 5</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4;
+            color: #1e293b;
+            user-select: none;
+        }
+        h1, h2, h3, .font-heading {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#22c55e 0.75px, transparent 0.75px), radial-gradient(#22c55e 0.75px, #f0fdf4 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+        .btn-bounce:hover {
+            transform: translateY(-2px) scale(1.02);
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-active {
+            background-color: #15803d !important;
+            color: white !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+        }
+        canvas {
+            touch-action: none;
+        }
+        .wheel-rotate {
+            transition: transform 4s cubic-bezier(0.15, 0.85, 0.25, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-pattern" onclick="enableBGMOnFirstClick()">
+
+    <!-- Header & Navigasi -->
+    <header class="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('utama')">
+                <div class="bg-white/20 p-2 rounded-2xl backdrop-blur-sm">
+                    <i class="fa-solid fa-scissors text-3xl text-yellow-300 transform -rotate-12"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide">RBT TAHUN 5</h1>
+                    <p class="text-xs text-green-100 font-medium">Mari Mengenal Artikel Jahitan</p>
+                </div>
+            </div>
+
+            <!-- Controls & Menu Utama -->
+            <div class="flex items-center gap-2 mt-2 md:mt-0 flex-wrap">
+                <!-- Music Toggle Button -->
+                <button onclick="toggleBGM(event)" id="bgmToggleBtn" class="bg-yellow-400 hover:bg-yellow-300 text-green-950 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow transition">
+                    <i id="bgmIcon" class="fa-solid fa-music"></i> <span id="bgmStatusText">Muzik Latar: Off</span>
+                </button>
+
+                <nav class="flex flex-wrap gap-1 md:gap-2">
+                    <button onclick="switchTab('utama')" id="tab-utama" class="tab-btn tab-active px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-sm font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-house"></i> Utama
+                    </button>
+                    <button onclick="switchTab('nota')" id="tab-nota" class="tab-btn bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-sm font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-book-open"></i> Nota
+                    </button>
+                    <button onclick="switchTab('simulasi')" id="tab-simulasi" class="tab-btn bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-sm font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Simulasi
+                    </button>
+                    <button onclick="switchTab('permainan')" id="tab-permainan" class="tab-btn bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-sm font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-gamepad"></i> Permainan
+                    </button>
+                    <button onclick="switchTab('sijil')" id="tab-sijil" class="tab-btn bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-sm font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-award"></i> Sijil
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- ================= HALAMAN 1: UTAMA ================= -->
+        <section id="page-utama" class="space-y-6">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-br from-emerald-500 via-teal-600 to-green-700 rounded-3xl p-6 md:p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-3 max-w-2xl">
+                    <span class="bg-yellow-400 text-green-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider inline-block">
+                        <i class="fa-solid fa-star"></i> Modul Pembelajaran RBT Sekolah Rendah
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold leading-tight font-heading">
+                        Mari Mengenal Artikel Jahitan! 🧵
+                    </h2>
+                    <p class="text-green-100 text-sm md:text-base">
+                        Selamat datang! Mari belajar tentang alatan jahitan, jenis-jenis mata jahitan asas, serta cubalah simulasi memotong kain dan menjahit interaktif di sini!
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchTab('nota')" class="btn-bounce bg-yellow-400 hover:bg-yellow-300 text-green-950 font-bold px-5 py-2.5 rounded-2xl shadow flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-play"></i> Mula Belajar Nota
+                        </button>
+                        <button onclick="switchTab('simulasi')" class="btn-bounce bg-white/20 hover:bg-white/30 text-white font-bold px-5 py-2.5 rounded-2xl backdrop-blur-md flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Cuba Simulasi Amali
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 hidden md:block">
+                    <div class="w-44 h-44 bg-white/10 rounded-3xl backdrop-blur-md p-4 flex flex-col items-center justify-center border border-white/20 shadow-inner text-center">
+                        <i class="fa-solid fa-shirt text-7xl text-yellow-300 drop-shadow animate-pulse"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cartoon Interactive Intro Card -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-emerald-100 space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-100 text-amber-700 p-3 rounded-2xl">
+                            <i class="fa-solid fa-face-smile-beam text-2xl animate-bounce"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 font-heading">Mari kita mengenali artikel jahitan!</h3>
+                            <p class="text-xs text-slate-500 font-medium">Pengenalan ceria & interaktif khas untuk murid Tahun 5</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartoon Visual Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1: Apakah Artikel Jahitan? -->
+                    <div class="bg-gradient-to-b from-amber-50 to-orange-50 rounded-2xl p-5 border-2 border-amber-200 hover:shadow-md transition text-center space-y-3">
+                        <div class="w-20 h-20 bg-amber-200 text-amber-700 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border-2 border-amber-300">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-amber-900 font-heading">Apa Itu Artikel Jahitan?</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Artikel jahitan ialah barangan berguna yang dihasilkan daripada kain atau fabrik menggunakan teknik jahitan tangan atau mesin! Contohnya: sarung bantal, beg pensel, & tempat pemegang cawan.
+                        </p>
+                        <span class="inline-block bg-amber-200 text-amber-900 text-[11px] font-bold px-3 py-1 rounded-full">✨ Kreatif & Berguna</span>
+                    </div>
+
+                    <!-- Card 2: Alatan & Bahan -->
+                    <div class="bg-gradient-to-b from-emerald-50 to-teal-50 rounded-2xl p-5 border-2 border-emerald-200 hover:shadow-md transition text-center space-y-3">
+                        <div class="w-20 h-20 bg-emerald-200 text-emerald-700 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border-2 border-emerald-300">
+                            <i class="fa-solid fa-scissors"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-emerald-900 font-heading">Alatan Jahitan Wajib</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Ketahui alatan penting seperti gunting kain khas, pita pengukur, kapur jahit berbentuk segitiga, jarum peniti, penetas jahitan, serta jarum tangan dan benang!
+                        </p>
+                        <span class="inline-block bg-emerald-200 text-emerald-900 text-[11px] font-bold px-3 py-1 rounded-full">✂️ Lengkap & Selamat</span>
+                    </div>
+
+                    <!-- Card 3: Mata Jahitan Asas -->
+                    <div class="bg-gradient-to-b from-sky-50 to-indigo-50 rounded-2xl p-5 border-2 border-sky-200 hover:shadow-md transition text-center space-y-3">
+                        <div class="w-20 h-20 bg-sky-200 text-sky-700 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border-2 border-sky-300">
+                            <i class="fa-solid fa-needle"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-sky-900 font-heading">6 Mata Jahitan Asas</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Pelajari 6 teknik jahitan utama: Jahitan Kia, Jelujur Halus, Jelujur Kasar, Silang Pangkah, Jahitan Sembat, dan Insang Pari terus dalam simulasi elektronik interaktif!
+                        </p>
+                        <span class="inline-block bg-sky-200 text-sky-900 text-[11px] font-bold px-3 py-1 rounded-full">🧵 Mudah Dikuasai</span>
+                    </div>
+                </div>
+
+                <!-- Fun Interactive Callout Banner -->
+                <div class="bg-gradient-to-r from-yellow-300 via-amber-300 to-orange-300 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 border-2 border-yellow-400 text-slate-900 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="text-3xl text-orange-600"><i class="fa-solid fa-lightbulb animate-bounce"></i></div>
+                        <div>
+                            <h4 class="font-extrabold text-base font-heading">Bersedia Untuk Menjadi Pereka Cilik?</h4>
+                            <p class="text-xs font-medium text-slate-800">Klik butang Nota untuk membaca alatan atau cuba Simulasi Amali sekarang!</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                        <button onclick="switchTab('nota')" class="flex-1 md:flex-none bg-white hover:bg-slate-50 text-emerald-800 font-extrabold px-4 py-2 rounded-xl text-xs shadow transition">
+                            <i class="fa-solid fa-book"></i> Ke Nota
+                        </button>
+                        <button onclick="switchTab('simulasi')" class="flex-1 md:flex-none bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold px-4 py-2 rounded-xl text-xs shadow transition">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Ke Simulasi
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Video Lagu Sewing 🎵 -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-emerald-100 space-y-4 mt-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b pb-4 gap-2">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 font-heading flex items-center gap-2">
+                                <i class="fa-solid fa-music text-pink-500"></i> Lagu Sewing 🎵
+                            </h3>
+                            <p class="text-slate-500 text-xs md:text-sm">Mari bernyanyi dan berseronok sambil mengenali konsep asas jahitan!</p>
+                        </div>
+                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 w-fit">
+                            <i class="fa-brands fa-youtube text-base"></i> YouTube
+                        </span>
+                    </div>
+                    <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md bg-black">
+                        <iframe id="videoPlayer1" class="w-full h-full" src="https://www.youtube.com/embed/kUYRejMf19Q?enablejsapi=1" title="Lagu Sewing 🎵" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN 2: NOTA ================= -->
+        <section id="page-nota" class="hidden space-y-8">
+            <!-- Video Pembelajaran -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between border-b pb-4 gap-2">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 font-heading">Video Pembelajaran</h2>
+                        <p class="text-slate-500 text-sm">Saksikan video panduan interaktif ini untuk memahami asas artikel dan alatan jahitan dengan lebih jelas.</p>
+                    </div>
+                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 w-fit">
+                        <i class="fa-brands fa-youtube text-base"></i> YouTube
+                    </span>
+                </div>
+                <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md bg-black">
+                    <iframe id="videoPlayer2" class="w-full h-full" src="https://www.youtube.com/embed/f4nereXQWsc?enablejsapi=1" title="Video Pembelajaran RBT Tahun 5" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- 1. Alatan Jahitan dan Fungsi -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b pb-4 gap-2">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 font-heading">1. Alatan Jahitan dan Fungsi</h2>
+                        <p class="text-slate-500 text-sm">Kenali alatan tangan yang digunakan dalam penyediaan dan penghasilan artikel jahitan.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Gunting Kain -->
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 hover:border-emerald-500 transition flex flex-col justify-between">
+                        <div>
+                            <img src="https://cdn.ruparupa.io/fit-in/400x400/filters:format(webp)/filters:quality(90)/ruparupa-com/image/upload/Products/10598671_1.jpg" alt="Gunting Kain" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Gunting+Kain'" class="w-full h-40 object-contain rounded-xl mb-3 shadow-sm bg-white p-1">
+                            <h3 class="font-bold text-lg text-emerald-800 mb-1">Gunting Kain</h3>
+                            <p class="text-slate-600 text-xs leading-relaxed">Mengunting fabrik atau kain mengikut garisan pola yang telah ditanda.</p>
+                        </div>
+                    </div>
+
+                    <!-- Pita Pengukur -->
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 hover:border-emerald-500 transition flex flex-col justify-between">
+                        <div>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS-19OjXk-8-68-0ODjNOqnSanfs9FgRlrUv1mi8Tfvw&s=10" alt="Pita Pengukur" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Pita+Pengukur'" class="w-full h-40 object-contain rounded-xl mb-3 shadow-sm bg-white p-2">
+                            <h3 class="font-bold text-lg text-emerald-800 mb-1">Pita Pengukur</h3>
+                            <p class="text-slate-600 text-xs leading-relaxed">Mengukur saiz fabrik atau ukuran badan dengan ketepatan sentimeter dan inci.</p>
+                        </div>
+                    </div>
+
+                    <!-- Kapur Tukang Jahit -->
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 hover:border-emerald-500 transition flex flex-col justify-between">
+                        <div>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2QnVoJZPydc7w6enyqIA8mcK7pX5dR2IBDm-HINl8hOPbMIRHGHZEmIE&s=10" alt="Kapur Tukang Jahit" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Kapur+Jahit'" class="w-full h-40 object-contain rounded-xl mb-3 shadow-sm bg-white p-2">
+                            <h3 class="font-bold text-lg text-emerald-800 mb-1">Kapur Tukang Jahit</h3>
+                            <p class="text-slate-600 text-xs leading-relaxed">Membuat garisan tanda pemotongan dan garisan jahitan pada permukaan fabrik.</p>
+                        </div>
+                    </div>
+
+                    <!-- Jarum Peniti -->
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 hover:border-emerald-500 transition flex flex-col justify-between">
+                        <div>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRighqYa2wpPmKvdiRACOwYaIimDUzUov8QnPv4Y5cLKNa--03ErcugbYI&s=10" alt="Jarum Peniti" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Jarum+Peniti'" class="w-full h-40 object-contain rounded-xl mb-3 shadow-sm bg-white p-2">
+                            <h3 class="font-bold text-lg text-emerald-800 mb-1">Jarum Peniti</h3>
+                            <p class="text-slate-600 text-xs leading-relaxed">Menyemat kertas pola pada fabrik dan menetapkan dua kepingan kain sebelum menjahit.</p>
+                        </div>
+                    </div>
+
+                    <!-- Penetas Jahitan -->
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 hover:border-emerald-500 transition flex flex-col justify-between">
+                        <div>
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjh-Xrr8FHTuwGtZeJerfCcvijxWlWOCU67Cn4ypScbG9cbgmgEPEt83GSjxCErxBYJ7Urp99tMBX9MB_kRmezImCD95Sh_03zpO25cfcPE5fkfx7ph9JdJ8e1YbPoH5-5mijyUK1BxRwo/s1600/rsz_tetas.jpg" alt="Penetas Jahitan" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Penetas+Jahitan'" class="w-full h-40 object-contain rounded-xl mb-3 shadow-sm bg-white p-2">
+                            <h3 class="font-bold text-lg text-emerald-800 mb-1">Penetas Jahitan</h3>
+                            <p class="text-slate-600 text-xs leading-relaxed">Menetas dan membuka mata jahitan yang tersilap serta memotong benang berlebihan.</p>
+                        </div>
+                    </div>
+
+                    <!-- Jarum Tangan & Benang -->
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 hover:border-emerald-500 transition flex flex-col justify-between">
+                        <div>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR_Posging_HMlOKHooMx6WSNiAVN0ZG6QLDZ3POKblSu3TJ0MwkqNF-E&s=10" alt="Jarum Tangan & Benang" onerror="this.src='https://placehold.co/400x400/e2e8f0/475569?text=Jarum+Tangan'" class="w-full h-40 object-contain rounded-xl mb-3 shadow-sm bg-white p-2">
+                            <h3 class="font-bold text-lg text-emerald-800 mb-1">Jarum Tangan & Benang</h3>
+                            <p class="text-slate-600 text-xs leading-relaxed">Membawa benang untuk menjahit kepingan kain secara jahitan tangan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Jenis Mata Jahitan Asas -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b pb-4 gap-2">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800 font-heading">2. Jenis Mata Jahitan Asas</h2>
+                        <p class="text-slate-500 text-sm">6 jenis mata jahitan utama dalam sukatan RBT Tahun 5.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Jahitan Kia -->
+                    <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-emerald-900">1. Jahitan Kia</h3>
+                            <span class="bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Kuat</span>
+                        </div>
+                        <p class="text-slate-600 text-xs mb-3">Memulakan dan mengakhiri jahitan. Sangat kukuh seperti jahitan mesin.</p>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-center">
+                            <img src="https://i.ytimg.com/vi/UfyStaop73I/hqdefault.jpg" alt="Jahitan Kia" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Jahitan+Kia'" class="w-full h-24 object-contain rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Jelujur Halus -->
+                    <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-emerald-900">2. Jelujur Halus</h3>
+                            <span class="bg-blue-200 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Kemasan</span>
+                        </div>
+                        <p class="text-slate-600 text-xs mb-3">Membuat kedutan atau kedut lepas serta membaiki kelepet kain.</p>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-center">
+                            <img src="https://i.ytimg.com/vi/RgjJKte6Jco/maxresdefault.jpg" alt="Jelujur Halus" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Jelujur+Halus'" class="w-full h-24 object-contain rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Jelujur Kasar -->
+                    <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-emerald-900">3. Jelujur Kasar</h3>
+                            <span class="bg-amber-200 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Sementara</span>
+                        </div>
+                        <p class="text-slate-600 text-xs mb-3">Menetapkan dua kepingan kain secara sementara sebelum jahitan kekal.</p>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-center">
+                            <img src="https://i.ytimg.com/vi/WBfTh-tA1EE/sddefault.jpg" alt="Jelujur Kasar" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Jelujur+Kasar'" class="w-full h-24 object-contain rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Silang Pangkah -->
+                    <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-emerald-900">4. Silang Pangkah</h3>
+                            <span class="bg-purple-200 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Hiasan</span>
+                        </div>
+                        <p class="text-slate-600 text-xs mb-3">Mengemaskan kelepet kain serta berfungsi sebagai corak hiasan.</p>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-center">
+                            <img src="https://i.ytimg.com/vi/CYz9cJmJTdg/maxresdefault.jpg" alt="Silang Pangkah" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Silang+Pangkah'" class="w-full h-24 object-contain rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Jahitan Sembat -->
+                    <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-emerald-900">5. Jahitan Sembat</h3>
+                            <span class="bg-rose-200 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Kelepet</span>
+                        </div>
+                        <p class="text-slate-600 text-xs mb-3">Menjahit kelepet baju atau bahagian bawah seluar secara serong teratur.</p>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-center">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQowCf2OvN2IGE3mOIk9scpW_mn5ECKxuui16B1t86smzwcTOQnst1SFGXb&s=10" alt="Jahitan Sembat" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Jahitan+Sembat'" class="w-full h-24 object-contain rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Insang Pari -->
+                    <div class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg text-emerald-900">6. Insang Pari</h3>
+                            <span class="bg-teal-200 text-teal-800 text-[10px] font-bold px-2 py-0.5 rounded-full">Tepi Kain</span>
+                        </div>
+                        <p class="text-slate-600 text-xs mb-3">Mengemaskan tepi kain supaya tidak berbulu dan hiasan corak tepi.</p>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-center">
+                            <img src="https://i.ytimg.com/vi/cCff2dznHxE/maxresdefault.jpg" alt="Insang Pari" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Insang+Pari'" class="w-full h-24 object-contain rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN 3: SIMULASI (INTERACTIVE CANVAS) ================= -->
+        <section id="page-simulasi" class="hidden space-y-6">
+            <!-- Sub Sub-nav -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+                <button onclick="switchSimPart('alatan')" id="btn-sim-alatan" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-600 text-white shadow flex items-center gap-2">
+                    <i class="fa-solid fa-scissors"></i> Simulasi A: Penggunaan Alatan Jahitan
+                </button>
+                <button onclick="switchSimPart('jahitan')" id="btn-sim-jahitan" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2">
+                    <i class="fa-solid fa-needle"></i> Simulasi B: Jahitan Interaktif
+                </button>
+            </div>
+
+            <!-- SIMULASI A: ALATAN JAHITAN -->
+            <div id="sim-part-alatan" class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 font-heading">Simulasi A: Interaksi Alatan Jahitan</h2>
+                    <p class="text-slate-500 text-sm">Pilih alatan di bawah dan lakukan aksi terus pada kain elektronik!</p>
+                </div>
+
+                <!-- Tool buttons -->
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="setInteractiveTool('gunting')" id="tool-btn-gunting" class="px-4 py-2.5 rounded-2xl font-bold text-xs bg-emerald-600 text-white shadow flex items-center gap-2">
+                        <i class="fa-solid fa-scissors text-yellow-300 text-sm"></i> 1. Gunting Kain (Gunting Elektronik)
+                    </button>
+                    <button onclick="setInteractiveTool('kapur')" id="tool-btn-kapur" class="px-4 py-2.5 rounded-2xl font-bold text-xs bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2">
+                        <span class="w-4 h-4 bg-orange-500 rounded-sm inline-block transform rotate-45 border border-orange-600 shadow-sm"></span> 2. Kapur Jahit Segitiga
+                    </button>
+                    <button onclick="setInteractiveTool('peniti')" id="tool-btn-peniti" class="px-4 py-2.5 rounded-2xl font-bold text-xs bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2">
+                        <i class="fa-solid fa-thumbtack text-rose-500"></i> 3. Jarum Peniti (Semat Kain)
+                    </button>
+                    <button onclick="resetSimA()" class="ml-auto px-4 py-2.5 rounded-2xl font-bold text-xs bg-rose-100 text-rose-700 hover:bg-rose-200 flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> Set Semula Kain
+                    </button>
+                </div>
+
+                <!-- Canvas Area Tool Simulation -->
+                <div class="relative bg-amber-50 rounded-3xl p-4 border-2 border-amber-200 text-center flex flex-col items-center">
+                    <p id="toolSimInstruction" class="text-xs font-bold text-emerald-800 bg-emerald-100 px-4 py-2 rounded-xl mb-3 shadow-sm">
+                        💡 Gunakan Gunting Elektronik: Tekan & seret logo gunting bulat untuk memotong kain menjadi dua bahagian!
+                    </p>
+                    <canvas id="toolCanvas" width="700" height="350" class="w-full max-w-2xl h-80 rounded-2xl bg-rose-300 border-2 border-rose-400 cursor-crosshair shadow-inner"></canvas>
+                </div>
+            </div>
+
+            <!-- SIMULASI B: JAHITAN INTERAKTIF -->
+            <div id="sim-part-jahitan" class="hidden bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 font-heading">Simulasi B: Panduan Jahitan Interaktif</h2>
+                    <p class="text-slate-500 text-sm">Pilih jenis jahitan. Tekan titik mengikut nombor turutan panduan untuk menjahit secara elektronik!</p>
+                </div>
+
+                <!-- Stitch Selection -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                    <button onclick="selectStitchGuide('jelujur_kasar')" id="btn-st-jelujur_kasar" class="stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow">
+                        Jelujur Kasar
+                    </button>
+                    <button onclick="selectStitchGuide('jelujur_halus')" id="btn-st-jelujur_halus" class="stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+                        Jelujur Halus
+                    </button>
+                    <button onclick="selectStitchGuide('kia')" id="btn-st-kia" class="stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+                        Jahitan Kia
+                    </button>
+                    <button onclick="selectStitchGuide('silang')" id="btn-st-silang" class="stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+                        Silang Pangkah
+                    </button>
+                    <button onclick="selectStitchGuide('sembat')" id="btn-st-sembat" class="stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+                        Jahitan Sembat
+                    </button>
+                    <button onclick="selectStitchGuide('insang')" id="btn-st-insang" class="stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50">
+                        Insang Pari
+                    </button>
+                </div>
+
+                <!-- Info Box for active stitch -->
+                <div id="stitchInfoBox" class="bg-emerald-50 border border-emerald-200 p-3 rounded-2xl text-xs font-semibold text-emerald-900 flex justify-between items-center">
+                    <span id="stitchInstructionText">💡 <b>Jelujur Kasar:</b> Tekan titik <b>1 ➔ 2 ➔ 3 ➔ 4</b> mengikut turutan merah untuk membuat jelujur jarak jauh.</span>
+                    <button onclick="resetStitchCanvas()" class="bg-white text-slate-700 border px-3 py-1 rounded-xl text-xs font-bold hover:bg-slate-100 flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> Mulakan Semula
+                    </button>
+                </div>
+
+                <!-- Stitch Canvas -->
+                <div class="bg-amber-100 rounded-3xl p-4 border-2 border-amber-300 text-center flex flex-col items-center">
+                    <canvas id="stitchCanvas" width="800" height="350" class="w-full max-w-3xl h-80 rounded-2xl bg-amber-50 border-2 border-amber-200 cursor-pointer shadow-inner"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN 4: PERMAINAN ================= -->
+        <section id="page-permainan" class="hidden space-y-6">
+            <!-- Game Sub Tabs -->
+            <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+                <button onclick="switchGameSub('padanan')" id="game-sub-padanan" class="px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-emerald-600 text-white shadow">
+                    <i class="fa-solid fa-link"></i> 1. Cari & Padan Alatan
+                </button>
+                <button onclick="switchGameSub('kuiz')" id="game-sub-kuiz" class="px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
+                    <i class="fa-solid fa-circle-question"></i> 2. Kuiz Gambar
+                </button>
+                <button onclick="switchGameSub('roda')" id="game-sub-roda" class="px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
+                    <i class="fa-solid fa-arrows-spin"></i> 3. Roda Tuah Jahitan
+                </button>
+            </div>
+
+            <!-- GAME 1: Cari & Padan -->
+            <div id="game-part-padanan" class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 font-heading">Permainan 1: Cari & Padan Alatan Jahitan</h2>
+                    <p class="text-slate-500 text-sm">Pilih nama alatan di sebelah kiri, kemudian klik fungsinya di sebelah kanan!</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left: Tools -->
+                    <div class="space-y-3" id="matchToolsContainer">
+                        <div onclick="selectMatchTool('Gunting Kain', this)" class="match-tool-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 font-bold text-sm text-slate-700 flex justify-between items-center transition">
+                            <span><i class="fa-solid fa-scissors text-emerald-600 mr-2"></i> Gunting Kain</span>
+                            <i class="fa-solid fa-circle-dot text-slate-300 status-icon"></i>
+                        </div>
+                        <div onclick="selectMatchTool('Pita Pengukur', this)" class="match-tool-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 font-bold text-sm text-slate-700 flex justify-between items-center transition">
+                            <span><i class="fa-solid fa-ruler text-emerald-600 mr-2"></i> Pita Pengukur</span>
+                            <i class="fa-solid fa-circle-dot text-slate-300 status-icon"></i>
+                        </div>
+                        <div onclick="selectMatchTool('Penetas Jahitan', this)" class="match-tool-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 font-bold text-sm text-slate-700 flex justify-between items-center transition">
+                            <span><i class="fa-solid fa-wand-magic text-emerald-600 mr-2"></i> Penetas Jahitan</span>
+                            <i class="fa-solid fa-circle-dot text-slate-300 status-icon"></i>
+                        </div>
+                        <div onclick="selectMatchTool('Jarum Peniti', this)" class="match-tool-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 font-bold text-sm text-slate-700 flex justify-between items-center transition">
+                            <span><i class="fa-solid fa-thumbtack text-emerald-600 mr-2"></i> Jarum Peniti</span>
+                            <i class="fa-solid fa-circle-dot text-slate-300 status-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Right: Functions -->
+                    <div class="space-y-3" id="matchFuncsContainer">
+                        <div onclick="selectMatchFunc('Menyemat pola pada fabrik agar tidak beranjak', this)" class="match-func-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 text-xs font-semibold text-slate-700 transition">
+                            Menyemat pola pada fabrik agar tidak beranjak
+                        </div>
+                        <div onclick="selectMatchFunc('Mengunting fabrik mengikut garisan pola', this)" class="match-func-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 text-xs font-semibold text-slate-700 transition">
+                            Mengunting fabrik mengikut garisan pola
+                        </div>
+                        <div onclick="selectMatchFunc('Mengukur saiz kain atau badan dengan tepat', this)" class="match-func-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 text-xs font-semibold text-slate-700 transition">
+                            Mengukur saiz kain atau badan dengan tepat
+                        </div>
+                        <div onclick="selectMatchFunc('Membuka jahitan yang silap dan memotong benang', this)" class="match-func-item p-4 bg-slate-50 rounded-2xl border-2 border-slate-200 cursor-pointer hover:border-emerald-500 text-xs font-semibold text-slate-700 transition">
+                            Membuka jahitan yang silap dan memotong benang
+                        </div>
+                    </div>
+                </div>
+
+                <div id="matchGameFeedback" class="hidden p-4 rounded-2xl bg-emerald-100 text-emerald-800 font-bold text-center text-sm"></div>
+            </div>
+
+            <!-- GAME 2: Kuiz Gambar -->
+            <div id="game-part-kuiz" class="hidden bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100 space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800 font-heading">Permainan 2: Kuiz Bergambar RBT</h2>
+                        <p class="text-slate-500 text-sm">Pilih jawapan yang paling tepat berdasarkan soalan di bawah!</p>
+                    </div>
+                    <div class="bg-emerald-100 text-emerald-800 font-bold px-4 py-2 rounded-2xl text-sm">
+                        Skor: <span id="quizScore">0</span>/3
+                    </div>
+                </div>
+
+                <div id="quizContainer" class="bg-slate-50 p-6 rounded-3xl border border-slate-200 space-y-4">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+
+            <!-- GAME 3: Roda Tuah -->
+            <div id="game-part-roda" class="hidden bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100 space-y-6 text-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 font-heading">Permainan 3: Roda Tuah Cabaran Jahitan</h2>
+                    <p class="text-slate-500 text-sm">Putar roda untuk mendapatkan soalan cabaran pilihan jawapan!</p>
+                </div>
+
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 border-8 border-emerald-500 rounded-full shadow-2xl overflow-hidden flex items-center justify-center bg-gradient-to-tr from-amber-300 via-emerald-300 to-teal-400 wheel-rotate" id="wheelCircle">
+                        <!-- Visual Wheel Section Dividers -->
+                        <div class="absolute inset-0 w-full h-full rounded-full opacity-40 bg-[conic-gradient(from_0deg,#10b981_0deg_90deg,#f59e0b_90deg_180deg,#06b6d4_180deg_270deg,#ec4899_270deg_360deg)]"></div>
+                        <div class="absolute top-2 z-20 text-rose-600 text-3xl drop-shadow-md">
+                            <i class="fa-solid fa-location-pin"></i>
+                        </div>
+                        <span class="font-extrabold text-slate-800 text-lg z-10 bg-white/90 px-4 py-2 rounded-2xl shadow-lg border border-slate-200">RBT TAHUN 5</span>
+                    </div>
+
+                    <button onclick="spinWheel()" id="spinBtn" class="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 font-extrabold px-8 py-3 rounded-2xl text-lg shadow hover:scale-105 transition">
+                        <i class="fa-solid fa-arrows-spin"></i> PUTAR RODA!
+                    </button>
+                </div>
+
+                <div id="wheelResult" class="hidden bg-emerald-50 p-6 rounded-3xl border border-emerald-200 text-slate-800 font-bold text-base max-w-xl mx-auto text-left space-y-4 shadow-sm"></div>
+            </div>
+        </section>
+
+        <!-- ================= HALAMAN 5: SIJIL ================= -->
+        <section id="page-sijil" class="hidden space-y-8">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-100 space-y-6">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-800 font-heading">Generator Sijil Anugerah Celik Jahitan</h2>
+                    <p class="text-slate-500 text-sm">Masukkan nama anda dan nama sekolah untuk menjana Sijil Penghargaan RBT Tahun 5 secara rasmi!</p>
+                </div>
+
+                <!-- Input Form -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Penuh Murid:</label>
+                        <input type="text" id="certStudentName" placeholder="Cth: Amirah Binti Ahmad" class="w-full p-3 rounded-xl border border-slate-300 font-semibold text-sm focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Sekolah / Kelas:</label>
+                        <input type="text" id="certSchoolName" placeholder="Cth: SK Taman Murni (5 Cemerlang)" class="w-full p-3 rounded-xl border border-slate-300 font-semibold text-sm focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div class="md:col-span-2 flex justify-end gap-2 pt-2">
+                        <button onclick="generateCertificate()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl text-sm shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-certificate"></i> Jana Sijil Sekarang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Printable Certificate Container -->
+                <div id="certificateCard" class="hidden relative bg-gradient-to-br from-amber-50 via-white to-emerald-50 rounded-3xl p-8 border-8 border-emerald-600 shadow-2xl text-center space-y-6 overflow-hidden max-w-3xl mx-auto">
+                    <div class="absolute top-3 left-3 text-emerald-600 text-3xl"><i class="fa-solid fa-ribbon"></i></div>
+                    <div class="absolute top-3 right-3 text-emerald-600 text-3xl"><i class="fa-solid fa-ribbon"></i></div>
+
+                    <div class="space-y-2">
+                        <span class="text-emerald-700 font-extrabold tracking-widest text-xs uppercase">Sijil Penghargaan RBT</span>
+                        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-wide font-heading">SIJIL CELIK ARTIKEL JAHITAN</h1>
+                        <p class="text-slate-500 text-xs italic">Dengan ini diperakukan bahawa</p>
+                    </div>
+
+                    <div class="py-2 border-b-2 border-emerald-400 max-w-md mx-auto">
+                        <h2 id="outStudentName" class="text-2xl md:text-3xl font-extrabold text-emerald-800 font-heading">NAMA MURID</h2>
+                    </div>
+
+                    <p id="outSchoolName" class="text-slate-700 font-semibold text-sm">SK TAMAN MURNI</p>
+
+                    <p class="text-slate-600 text-xs max-w-lg mx-auto leading-relaxed">
+                        Telah berjaya menyelesaikan modul pembelajaran interaktif <b>RBT Tahun 5: Mari Mengenal Artikel Jahitan</b>, menguasai fungsi alatan jahitan, jenis mata jahitan asas, serta cemerlang dalam aktiviti simulasi amali.
+                    </p>
+
+                    <div class="flex justify-between items-end pt-8 max-w-md mx-auto text-xs text-slate-500">
+                        <div class="text-center space-y-1">
+                            <div class="w-32 border-b border-slate-400 mx-auto"></div>
+                            <p class="font-bold text-slate-700">Guru RBT</p>
+                        </div>
+                        <div class="text-center space-y-1">
+                            <span class="text-amber-500 text-3xl block"><i class="fa-solid fa-award"></i></span>
+                            <p id="certDate" class="font-bold text-slate-700">2026</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-6 text-center text-xs mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="font-semibold text-slate-300">Modul Interaktif RBT Tahun 5 - Mari Mengenal Artikel Jahitan</p>
+            <p>© 2026 RBT Tahun 5. Rekabentuk & Teknologi Sekolah Rendah.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- MP3 BACKGROUND MUSIC & WEB AUDIO SFX ---
+        let audioCtx = null;
+        let isBgmPlaying = false;
+        const bgmAudio = new Audio('./Zambolino - Funky Monkey (freetouse.com).mp3');
+        bgmAudio.loop = true;
+        bgmAudio.preload = 'auto';
+        bgmAudio.volume = 0.35;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleBGM(e) {
+            if (e) e.stopPropagation();
+            initAudio();
+            const btnText = document.getElementById('bgmStatusText');
+            const btnIcon = document.getElementById('bgmIcon');
+
+            if (!isBgmPlaying) {
+                bgmAudio.play().then(() => {
+                    isBgmPlaying = true;
+                    btnText.textContent = "Muzik Latar: On";
+                    btnIcon.className = "fa-solid fa-volume-high";
+                }).catch((error) => {
+                    console.error('Tidak dapat memainkan muzik latar:', error);
+                    btnText.textContent = "Klik untuk main muzik";
+                });
+            } else {
+                bgmAudio.pause();
+                isBgmPlaying = false;
+                btnText.textContent = "Muzik Latar: Off";
+                btnIcon.className = "fa-solid fa-volume-xmark";
+            }
+        }
+
+        function enableBGMOnFirstClick() {
+            initAudio();
+            document.body.onclick = null;
+        }
+
+        function playSuccessSound() {
+            initAudio();
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch(e){}
+        }
+
+        // Wheel Ticking Sound Effect
+        function playWheelTickSound() {
+            initAudio();
+            if (!audioCtx) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } catch(e){}
+        }
+
+        // --- TTS SOUND SPEECH ---
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ms-MY';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // --- TAB SWITCHING LOGIC ---
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('page-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('bg-white/10', 'text-white');
+            });
+
+            const activeBtn = document.getElementById('tab-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('tab-active');
+                activeBtn.classList.remove('bg-white/10');
+            }
+
+            if (tabId === 'simulasi') {
+                initToolCanvas();
+                initStitchCanvas();
+            } else if (tabId === 'permainan') {
+                initQuiz();
+            }
+        }
+
+        function switchSimPart(part) {
+            document.getElementById('sim-part-alatan').classList.add('hidden');
+            document.getElementById('sim-part-jahitan').classList.add('hidden');
+            document.getElementById('btn-sim-alatan').className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2";
+            document.getElementById('btn-sim-jahitan').className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2";
+
+            if (part === 'alatan') {
+                document.getElementById('sim-part-alatan').classList.remove('hidden');
+                document.getElementById('btn-sim-alatan').className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-600 text-white shadow flex items-center gap-2";
+                setTimeout(initToolCanvas, 100);
+            } else {
+                document.getElementById('sim-part-jahitan').classList.remove('hidden');
+                document.getElementById('btn-sim-jahitan').className = "px-5 py-2.5 rounded-xl font-bold text-sm bg-emerald-600 text-white shadow flex items-center gap-2";
+                setTimeout(initStitchCanvas, 100);
+            }
+        }
+
+        function switchGameSub(sub) {
+            document.getElementById('game-part-padanan').classList.add('hidden');
+            document.getElementById('game-part-kuiz').classList.add('hidden');
+            document.getElementById('game-part-roda').classList.add('hidden');
+
+            document.getElementById('game-sub-padanan').className = "px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-white text-slate-600 border hover:bg-slate-50";
+            document.getElementById('game-sub-kuiz').className = "px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-white text-slate-600 border hover:bg-slate-50";
+            document.getElementById('game-sub-roda').className = "px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-white text-slate-600 border hover:bg-slate-50";
+
+            if (sub === 'padanan') {
+                document.getElementById('game-part-padanan').classList.remove('hidden');
+                document.getElementById('game-sub-padanan').className = "px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-emerald-600 text-white shadow";
+            } else if (sub === 'kuiz') {
+                document.getElementById('game-part-kuiz').classList.remove('hidden');
+                document.getElementById('game-sub-kuiz').className = "px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-emerald-600 text-white shadow";
+                initQuiz();
+            } else if (sub === 'roda') {
+                document.getElementById('game-part-roda').classList.remove('hidden');
+                document.getElementById('game-sub-roda').className = "px-4 py-2 rounded-xl font-bold text-xs md:text-sm bg-emerald-600 text-white shadow";
+            }
+        }
+
+        // --- SIMULASI A: TOOL INTERACTIVE CANVAS ---
+        let toolCanvas, toolCtx;
+        let currentTool = 'gunting';
+        let cutProgress = 0;
+        let chalkLines = [];
+        let pins = [];
+        let isMouseDown = false;
+        
+        // Dynamic position for interactive drag handles
+        let scissorPos = { x: 40, y: 175 };
+        let chalkPos = { x: 50, y: 50 };
+        let isDraggingScissor = false;
+        let isDraggingChalk = false;
+
+        function initToolCanvas() {
+            toolCanvas = document.getElementById('toolCanvas');
+            if (!toolCanvas) return;
+            toolCtx = toolCanvas.getContext('2d');
+            resetSimA();
+            renderToolCanvas();
+
+            toolCanvas.onmousedown = (e) => { isMouseDown = true; handleToolStart(e); };
+            toolCanvas.onmousemove = (e) => { if (isMouseDown) handleToolMove(e); };
+            toolCanvas.onmouseup = () => { isMouseDown = false; isDraggingScissor = false; isDraggingChalk = false; };
+            toolCanvas.ontouchstart = (e) => { isMouseDown = true; handleToolStart(e.touches[0]); };
+            toolCanvas.ontouchmove = (e) => { if (isMouseDown) handleToolMove(e.touches[0]); };
+            toolCanvas.ontouchend = () => { isMouseDown = false; isDraggingScissor = false; isDraggingChalk = false; };
+        }
+
+        function setInteractiveTool(tool) {
+            currentTool = tool;
+            document.getElementById('tool-btn-gunting').className = "px-4 py-2.5 rounded-2xl font-bold text-xs bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2";
+            document.getElementById('tool-btn-kapur').className = "px-4 py-2.5 rounded-2xl font-bold text-xs bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2";
+            document.getElementById('tool-btn-peniti').className = "px-4 py-2.5 rounded-2xl font-bold text-xs bg-white text-slate-700 border hover:bg-slate-50 flex items-center gap-2";
+
+            const activeBtn = document.getElementById('tool-btn-' + tool);
+            if (activeBtn) activeBtn.className = "px-4 py-2.5 rounded-2xl font-bold text-xs bg-emerald-600 text-white shadow flex items-center gap-2";
+
+            const instr = document.getElementById('toolSimInstruction');
+            if (tool === 'gunting') {
+                instr.innerHTML = "💡 <b>Gunting Elektronik:</b> Tekan & seret logo gunting bulat dari kiri ke kanan sepanjang garisan merah untuk memotong kain!";
+            } else if (tool === 'kapur') {
+                instr.innerHTML = "💡 <b>Kapur Jahit Segitiga:</b> Tekan & seret ikon kapur segi tiga di atas kain untuk melukis kesan kapur oren!";
+            } else {
+                instr.innerHTML = "💡 <b>Jarum Peniti:</b> Klik pada kain untuk menyemat jarum peniti penetap!";
+            }
+            renderToolCanvas();
+        }
+
+        function getCanvasCoords(e) {
+            const rect = toolCanvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (toolCanvas.width / rect.width),
+                y: (e.clientY - rect.top) * (toolCanvas.height / rect.height)
+            };
+        }
+
+        function handleToolStart(e) {
+            const coords = getCanvasCoords(e);
+            const x = coords.x;
+            const y = coords.y;
+
+            if (currentTool === 'gunting') {
+                // Check if clicked inside Scissor Handle Circle
+                const dist = Math.hypot(x - scissorPos.x, y - scissorPos.y);
+                if (dist < 30) {
+                    isDraggingScissor = true;
+                }
+            } else if (currentTool === 'kapur') {
+                // Check if clicked inside Triangle Chalk Handle
+                const dist = Math.hypot(x - chalkPos.x, y - chalkPos.y);
+                if (dist < 35) {
+                    isDraggingChalk = true;
+                }
+            } else if (currentTool === 'peniti') {
+                pins.push({ x, y });
+                playSuccessSound();
+            }
+            renderToolCanvas();
+        }
+
+        function handleToolMove(e) {
+            const coords = getCanvasCoords(e);
+            const x = coords.x;
+            const y = coords.y;
+
+            if (currentTool === 'gunting' && isDraggingScissor) {
+                // Drag scissor along the center cutting line
+                scissorPos.x = Math.max(30, Math.min(toolCanvas.width - 30, x));
+                scissorPos.y = toolCanvas.height / 2;
+
+                if (scissorPos.x > cutProgress) {
+                    cutProgress = scissorPos.x;
+                    if (cutProgress >= toolCanvas.width - 40) {
+                        playSuccessSound();
+                        confetti({ particleCount: 60, spread: 70 });
+                    }
+                }
+            } else if (currentTool === 'kapur' && isDraggingChalk) {
+                // Drag triangular chalk and leave chalk marks
+                chalkPos.x = Math.max(20, Math.min(toolCanvas.width - 20, x));
+                chalkPos.y = Math.max(20, Math.min(toolCanvas.height - 20, y));
+                chalkLines.push({ x: chalkPos.x, y: chalkPos.y + 15 });
+            }
+            renderToolCanvas();
+        }
+
+        function resetSimA() {
+            cutProgress = 0;
+            chalkLines = [];
+            pins = [];
+            scissorPos = { x: 35, y: toolCanvas.height / 2 };
+            chalkPos = { x: 60, y: 60 };
+            isDraggingScissor = false;
+            isDraggingChalk = false;
+            renderToolCanvas();
+        }
+
+        function renderToolCanvas() {
+            if (!toolCtx) return;
+            toolCtx.clearRect(0, 0, toolCanvas.width, toolCanvas.height);
+
+            const midY = toolCanvas.height / 2;
+            
+            // Calculate physical separation gap based on cutting progress
+            // As cutting progresses, the top and bottom fabric pieces separate clearly
+            const splitRatio = cutProgress / toolCanvas.width;
+            const separationGap = Math.min(30, Math.floor(splitRatio * 35));
+
+            // Upper Fabric Piece
+            toolCtx.save();
+            toolCtx.fillStyle = '#fda4af';
+            toolCtx.strokeStyle = '#e11d48';
+            toolCtx.lineWidth = 2;
+            
+            toolCtx.beginPath();
+            toolCtx.rect(0, 0, toolCanvas.width, midY - (cutProgress > 0 ? (separationGap + 2) : 0));
+            toolCtx.fill();
+            toolCtx.stroke();
+
+            // Upper Fabric Label
+            if (cutProgress > 100) {
+                toolCtx.fillStyle = '#9f1239';
+                toolCtx.font = 'bold 12px Inter';
+                toolCtx.textAlign = 'left';
+                toolCtx.fillText('✂️ Kain Bahagian A', 15, Math.max(25, midY - separationGap - 20));
+            }
+            toolCtx.restore();
+
+            // Lower Fabric Piece
+            toolCtx.save();
+            toolCtx.fillStyle = '#fda4af';
+            toolCtx.strokeStyle = '#e11d48';
+            toolCtx.lineWidth = 2;
+
+            toolCtx.beginPath();
+            toolCtx.rect(0, midY + (cutProgress > 0 ? (separationGap + 2) : 0), toolCanvas.width, midY);
+            toolCtx.fill();
+            toolCtx.stroke();
+
+            // Lower Fabric Label
+            if (cutProgress > 100) {
+                toolCtx.fillStyle = '#9f1239';
+                toolCtx.font = 'bold 12px Inter';
+                toolCtx.textAlign = 'left';
+                toolCtx.fillText('✂️ Kain Bahagian B', 15, Math.min(toolCanvas.height - 15, midY + separationGap + 30));
+            }
+            toolCtx.restore();
+
+            // Cut Line Guide (Dashed Red Line for Uncut Segment)
+            if (cutProgress < toolCanvas.width) {
+                toolCtx.save();
+                toolCtx.strokeStyle = '#ef4444';
+                toolCtx.lineWidth = 2;
+                toolCtx.setLineDash([8, 8]);
+                toolCtx.beginPath();
+                toolCtx.moveTo(cutProgress, midY);
+                toolCtx.lineTo(toolCanvas.width, midY);
+                toolCtx.stroke();
+                toolCtx.restore();
+            }
+
+            // Draw Chalk Lines (Drawn by triangle chalk)
+            toolCtx.save();
+            toolCtx.strokeStyle = '#f97316';
+            toolCtx.lineWidth = 5;
+            toolCtx.lineCap = 'round';
+            toolCtx.beginPath();
+            for (let i = 0; i < chalkLines.length; i++) {
+                if (i === 0) toolCtx.moveTo(chalkLines[i].x, chalkLines[i].y);
+                else toolCtx.lineTo(chalkLines[i].x, chalkLines[i].y);
+            }
+            toolCtx.stroke();
+            toolCtx.restore();
+
+            // Draw Pins
+            pins.forEach(p => {
+                toolCtx.save();
+                toolCtx.fillStyle = '#e11d48';
+                toolCtx.beginPath();
+                toolCtx.arc(p.x, p.y - 12, 6, 0, Math.PI * 2);
+                toolCtx.fill();
+
+                toolCtx.strokeStyle = '#94a3b8';
+                toolCtx.lineWidth = 2;
+                toolCtx.beginPath();
+                toolCtx.moveTo(p.x, p.y - 6);
+                toolCtx.lineTo(p.x, p.y + 10);
+                toolCtx.stroke();
+                toolCtx.restore();
+            });
+
+            // --- DRAW INTERACTIVE GUNTING LOGO HANDLE ---
+            if (currentTool === 'gunting') {
+                toolCtx.save();
+                // Outer glow handle
+                toolCtx.fillStyle = '#059669';
+                toolCtx.beginPath();
+                toolCtx.arc(scissorPos.x, scissorPos.y, 24, 0, Math.PI * 2);
+                toolCtx.fill();
+                toolCtx.strokeStyle = '#ffffff';
+                toolCtx.lineWidth = 3;
+                toolCtx.stroke();
+
+                // Scissors Icon Text / Graphic
+                toolCtx.fillStyle = '#fde047';
+                toolCtx.font = 'bold 22px "Font Awesome 6 Free"';
+                toolCtx.textAlign = 'center';
+                toolCtx.textBaseline = 'middle';
+                toolCtx.fillText('✂️', scissorPos.x, scissorPos.y);
+                toolCtx.restore();
+            }
+
+            // --- DRAW INTERACTIVE TRIANGLE CHALK LOGO HANDLE ---
+            if (currentTool === 'kapur') {
+                toolCtx.save();
+                const cx = chalkPos.x;
+                const cy = chalkPos.y;
+
+                // Draw Triangular Tailor's Chalk shape
+                toolCtx.beginPath();
+                toolCtx.moveTo(cx, cy - 20);
+                toolCtx.lineTo(cx - 22, cy + 18);
+                toolCtx.lineTo(cx + 22, cy + 18);
+                toolCtx.closePath();
+
+                toolCtx.fillStyle = '#f97316';
+                toolCtx.fill();
+                toolCtx.lineWidth = 3;
+                toolCtx.strokeStyle = '#ffffff';
+                toolCtx.stroke();
+
+                // Chalk Center Detail
+                toolCtx.beginPath();
+                toolCtx.arc(cx, cy + 4, 6, 0, Math.PI * 2);
+                toolCtx.fillStyle = '#ea580c';
+                toolCtx.fill();
+
+                toolCtx.restore();
+            }
+        }
+
+        // --- SIMULASI B: STITCH INTERACTIVE CANVAS ---
+        let stitchCanvas, stitchCtx;
+        let activeStitchType = 'jelujur_kasar';
+        let currentStepIndex = 0;
+        let drawnStitches = [];
+
+        const STITCH_GUIDES = {
+            jelujur_kasar: {
+                name: "Jelujur Kasar",
+                desc: "Tekan titik <b>1 ➔ 2 ➔ 3 ➔ 4</b> untuk membuat jahitan jelujur kasar jarak jauh.",
+                points: [{x: 100, y: 175}, {x: 250, y: 175}, {x: 400, y: 175}, {x: 550, y: 175}, {x: 700, y: 175}]
+            },
+            jelujur_halus: {
+                name: "Jelujur Halus",
+                desc: "Tekan titik <b>1 ➔ 2 ➔ 3 ➔ 4 ➔ 5 ➔ 6</b> untuk membuat jahitan jelujur halus yang rapat.",
+                points: [{x: 100, y: 175}, {x: 180, y: 175}, {x: 260, y: 175}, {x: 340, y: 175}, {x: 420, y: 175}, {x: 500, y: 175}, {x: 580, y: 175}, {x: 660, y: 175}]
+            },
+            kia: {
+                name: "Jahitan Kia",
+                desc: "Tekan mengikut urutan berpatah balik untuk menghasilkan Jahitan Kia yang kukuh.",
+                points: [{x: 150, y: 175}, {x: 250, y: 175}, {x: 200, y: 175}, {x: 350, y: 175}, {x: 300, y: 175}, {x: 450, y: 175}]
+            },
+            silang: {
+                name: "Silang Pangkah",
+                desc: "Tekan bersilang (Atas ➔ Bawah ➔ Atas) untuk membina corak Silang Pangkah.",
+                points: [{x: 100, y: 120}, {x: 180, y: 220}, {x: 180, y: 120}, {x: 260, y: 220}, {x: 260, y: 120}, {x: 340, y: 220}]
+            },
+            sembat: {
+                name: "Jahitan Sembat",
+                desc: "Tekan senget serong pada kelepet untuk Jahitan Sembat.",
+                points: [{x: 100, y: 220}, {x: 140, y: 130}, {x: 200, y: 220}, {x: 240, y: 130}, {x: 300, y: 220}, {x: 340, y: 130}]
+            },
+            insang: {
+                name: "Insang Pari",
+                desc: "Tekan secara bergelung pada tepi kain untuk Insang Pari.",
+                points: [{x: 100, y: 220}, {x: 100, y: 120}, {x: 180, y: 120}, {x: 180, y: 220}, {x: 260, y: 120}, {x: 260, y: 220}]
+            }
+        };
+
+        function initStitchCanvas() {
+            stitchCanvas = document.getElementById('stitchCanvas');
+            if (!stitchCanvas) return;
+            stitchCtx = stitchCanvas.getContext('2d');
+
+            stitchCanvas.onclick = (e) => {
+                const rect = stitchCanvas.getBoundingClientRect();
+                const x = (e.clientX - rect.left) * (stitchCanvas.width / rect.width);
+                const y = (e.clientY - rect.top) * (stitchCanvas.height / rect.height);
+                handleStitchClick(x, y);
+            };
+
+            renderStitchCanvas();
+        }
+
+        function selectStitchGuide(type) {
+            activeStitchType = type;
+            currentStepIndex = 0;
+            drawnStitches = [];
+
+            document.querySelectorAll('.stitch-sel-btn').forEach(btn => {
+                btn.className = "stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 border hover:bg-slate-50";
+            });
+            const activeBtn = document.getElementById('btn-st-' + type);
+            if (activeBtn) activeBtn.className = "stitch-sel-btn p-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow";
+
+            const guide = STITCH_GUIDES[type];
+            document.getElementById('stitchInstructionText').innerHTML = `💡 <b>${guide.name}:</b> ${guide.desc}`;
+            renderStitchCanvas();
+        }
+
+        function handleStitchClick(x, y) {
+            const guide = STITCH_GUIDES[activeStitchType];
+            if (currentStepIndex >= guide.points.length) return;
+
+            const target = guide.points[currentStepIndex];
+            const dist = Math.hypot(target.x - x, target.y - y);
+
+            if (dist < 30) {
+                drawnStitches.push(target);
+                currentStepIndex++;
+                playSuccessSound();
+
+                if (currentStepIndex === guide.points.length) {
+                    confetti({ particleCount: 60, spread: 70 });
+                }
+                renderStitchCanvas();
+            }
+        }
+
+        function resetStitchCanvas() {
+            currentStepIndex = 0;
+            drawnStitches = [];
+            renderStitchCanvas();
+        }
+
+        function renderStitchCanvas() {
+            if (!stitchCtx) return;
+            stitchCtx.clearRect(0, 0, stitchCanvas.width, stitchCanvas.height);
+
+            // Fabric background lines
+            stitchCtx.strokeStyle = '#fde68a';
+            stitchCtx.lineWidth = 1;
+            for (let y = 30; y < stitchCanvas.height; y += 30) {
+                stitchCtx.beginPath();
+                stitchCtx.moveTo(0, y);
+                stitchCtx.lineTo(stitchCanvas.width, y);
+                stitchCtx.stroke();
+            }
+
+            const guide = STITCH_GUIDES[activeStitchType];
+
+            // Draw drawn stitches (Thread)
+            if (drawnStitches.length > 1) {
+                stitchCtx.strokeStyle = '#2563eb';
+                stitchCtx.lineWidth = 5;
+                stitchCtx.beginPath();
+                for (let i = 0; i < drawnStitches.length; i++) {
+                    if (i === 0) stitchCtx.moveTo(drawnStitches[i].x, drawnStitches[i].y);
+                    else stitchCtx.lineTo(drawnStitches[i].x, drawnStitches[i].y);
+                }
+                stitchCtx.stroke();
+            }
+
+            // Draw targets
+            guide.points.forEach((p, idx) => {
+                const isDrawn = idx < currentStepIndex;
+                const isNext = idx === currentStepIndex;
+
+                stitchCtx.beginPath();
+                stitchCtx.arc(p.x, p.y, isNext ? 14 : 10, 0, Math.PI * 2);
+                stitchCtx.fillStyle = isDrawn ? '#16a34a' : (isNext ? '#dc2626' : '#94a3b8');
+                stitchCtx.fill();
+
+                stitchCtx.fillStyle = '#ffffff';
+                stitchCtx.font = 'bold 12px Inter';
+                stitchCtx.textAlign = 'center';
+                stitchCtx.textBaseline = 'middle';
+                stitchCtx.fillText(idx + 1, p.x, p.y);
+            });
+        }
+
+        // --- GAME 1: MATCHING TOOL LOGIC ---
+        let selectedTool = null;
+        let selectedToolEl = null;
+
+        function selectMatchTool(toolName, el) {
+            document.querySelectorAll('.match-tool-item').forEach(i => i.classList.remove('border-emerald-500', 'bg-emerald-50'));
+            selectedTool = toolName;
+            selectedToolEl = el;
+            el.classList.add('border-emerald-500', 'bg-emerald-50');
+        }
+
+        function selectMatchFunc(funcText, el) {
+            if (!selectedTool) {
+                alert("Sila pilih nama alatan di sebelah kiri terlebih dahulu!");
+                return;
+            }
+
+            const matches = {
+                'Gunting Kain': 'Mengunting fabrik mengikut garisan pola',
+                'Pita Pengukur': 'Mengukur saiz kain atau badan dengan tepat',
+                'Penetas Jahitan': 'Membuka jahitan yang silap dan memotong benang',
+                'Jarum Peniti': 'Menyemat pola pada fabrik agar tidak beranjak'
+            };
+
+            const feedback = document.getElementById('matchGameFeedback');
+            if (matches[selectedTool] === funcText) {
+                playSuccessSound();
+                selectedToolEl.classList.add('bg-green-100', 'text-green-800', 'pointer-events-none');
+                selectedToolEl.querySelector('.status-icon').className = "fa-solid fa-circle-check text-green-600";
+                el.classList.add('bg-green-100', 'text-green-800', 'pointer-events-none');
+
+                feedback.classList.remove('hidden', 'bg-rose-100', 'text-rose-800');
+                feedback.classList.add('bg-emerald-100', 'text-emerald-800');
+                feedback.textContent = `🎉 Syabas! Padanan tepat untuk ${selectedTool}!`;
+            } else {
+                feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800');
+                feedback.classList.add('bg-rose-100', 'text-rose-800');
+                feedback.textContent = `❌ Tidak tepat. Cuba padankan ${selectedTool} dengan fungsi yang betul.`;
+            }
+
+            selectedTool = null;
+            selectedToolEl = null;
+        }
+
+        // --- GAME 2: PICTURE QUIZ LOGIC ---
+        const quizData = [
+            {
+                q: "1. Apakah nama alatan yang digunakan untuk mengukur fabrik atau saiz badan?",
+                img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS-19OjXk-8-68-0ODjNOqnSanfs9FgRlrUv1mi8Tfvw&s=10",
+                options: ["Gunting Kain", "Pita Pengukur", "Penetas Jahitan"],
+                ans: 1
+            },
+            {
+                q: "2. Apakah jenis mata jahitan yang sangat kukuh dan digunakan untuk memulakan jahitan?",
+                img: "https://i.ytimg.com/vi/UfyStaop73I/hqdefault.jpg",
+                options: ["Jahitan Kia", "Silang Pangkah", "Insang Pari"],
+                ans: 0
+            },
+            {
+                q: "3. Alatan manakah yang digunakan untuk memotong fabrik mengikut garisan pola?",
+                img: "https://cdn.ruparupa.io/fit-in/400x400/filters:format(webp)/filters:quality(90)/ruparupa-com/image/upload/Products/10598671_1.jpg",
+                options: ["Jarum Tangan", "Gunting Kain", "Kapur Jahit"],
+                ans: 1
+            }
+        ];
+
+        let quizIndex = 0;
+        let score = 0;
+
+        function initQuiz() {
+            quizIndex = 0;
+            score = 0;
+            document.getElementById('quizScore').textContent = score;
+            renderQuizCard();
+        }
+
+        function renderQuizCard() {
+            const container = document.getElementById('quizContainer');
+            if (quizIndex >= quizData.length) {
+                container.innerHTML = `
+                    <div class="text-center space-y-4 py-8">
+                        <h3 class="text-3xl font-extrabold text-emerald-800 font-heading">Tahniah! Kuiz Selesai 🎉</h3>
+                        <p class="text-slate-600 font-bold text-lg">Skor Akhir Anda: ${score} / ${quizData.length}</p>
+                        <button onclick="initQuiz()" class="bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-2xl shadow hover:bg-emerald-700">Cuba Lagi</button>
+                    </div>
+                `;
+                confetti({ particleCount: 80, spread: 80 });
+                return;
+            }
+
+            const item = quizData[quizIndex];
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <h3 class="font-bold text-lg text-slate-800 font-heading">${item.q}</h3>
+                    <img src="${item.img}" onerror="this.src='https://placehold.co/400x200/e2e8f0/475569?text=Gambar+Kuiz'" class="w-48 h-36 object-contain bg-white rounded-2xl p-2 border shadow-sm mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                        ${item.options.map((opt, i) => `
+                            <button onclick="checkQuizAns(${i})" class="p-3 bg-white rounded-xl border-2 border-slate-200 hover:border-emerald-500 font-bold text-sm text-slate-700 transition">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkQuizAns(selected) {
+            if (selected === quizData[quizIndex].ans) {
+                score++;
+                playSuccessSound();
+                document.getElementById('quizScore').textContent = score;
+            }
+            quizIndex++;
+            renderQuizCard();
+        }
+
+        // --- GAME 3: WHEEL OF FORTUNE LOGIC ---
+        const wheelQuestions = [
+            {
+                q: "Apakah fungsi Penetas Jahitan?",
+                options: [
+                    "Membuka mata jahitan tersilap & memotong benang",
+                    "Menyemat kertas pola pada fabrik",
+                    "Mengukur saiz kain dengan tepat"
+                ],
+                ans: 0
+            },
+            {
+                q: "Jahitan apakah yang digunakan pada tepi kain supaya tidak berbulu?",
+                options: [
+                    "Jahitan Kia",
+                    "Jahitan Insang Pari",
+                    "Jelujur Kasar"
+                ],
+                ans: 1
+            },
+            {
+                q: "Apakah fungsi Jarum Peniti?",
+                options: [
+                    "Memotong kain mengikut garisan pola",
+                    "Menyemat kertas pola pada fabrik",
+                    "Membuat kedutan pada kain"
+                ],
+                ans: 1
+            },
+            {
+                q: "Jahitan manakah berfungsi sebagai hiasan dan kemasan kelepet?",
+                options: [
+                    "Silang Pangkah",
+                    "Jelujur Halus",
+                    "Jahitan Kia"
+                ],
+                ans: 0
+            }
+        ];
+
+        let currentWheelQuestion = null;
+        let totalWheelRotation = 0;
+        let isSpinning = false;
+
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const spinBtn = document.getElementById('spinBtn');
+            if (spinBtn) spinBtn.disabled = true;
+
+            const wheel = document.getElementById('wheelCircle');
+            
+            // Generate full 360-degree multiple spins (5 to 8 full rotations + random angle)
+            const additionalDegrees = 1800 + Math.floor(Math.random() * 1080);
+            totalWheelRotation += additionalDegrees;
+
+            wheel.style.transform = `rotate(${totalWheelRotation}deg)`;
+
+            const resultBox = document.getElementById('wheelResult');
+            resultBox.classList.add('hidden');
+
+            // Play decelerating tick sounds during rotation
+            const totalDuration = 4000;
+            const startTime = Date.now();
+
+            function triggerTickSound() {
+                const elapsed = Date.now() - startTime;
+                if (elapsed < totalDuration) {
+                    playWheelTickSound();
+                    // Cubic ease-out calculation for slowing tick intervals
+                    const progress = elapsed / totalDuration;
+                    const nextInterval = 40 + Math.pow(progress, 2.5) * 450;
+                    setTimeout(triggerTickSound, nextInterval);
+                }
+            }
+            triggerTickSound();
+
+            setTimeout(() => {
+                isSpinning = false;
+                if (spinBtn) spinBtn.disabled = false;
+
+                currentWheelQuestion = wheelQuestions[Math.floor(Math.random() * wheelQuestions.length)];
+                
+                resultBox.classList.remove('hidden');
+                resultBox.innerHTML = `
+                    <h4 class="text-emerald-900 font-extrabold text-lg border-b pb-2">🎯 Soalan Cabaran Roda:</h4>
+                    <p class="text-slate-800 text-sm font-bold mb-3">${currentWheelQuestion.q}</p>
+                    <div class="grid grid-cols-1 gap-2" id="wheelOptionBtns">
+                        ${currentWheelQuestion.options.map((opt, idx) => `
+                            <button onclick="checkWheelAnswer(${idx})" class="w-full text-left p-3 rounded-xl border border-emerald-200 bg-white hover:bg-emerald-100 text-slate-800 text-xs font-semibold transition flex items-center justify-between">
+                                <span>${opt}</span>
+                                <i class="fa-regular fa-circle text-emerald-500 text-sm"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="wheelFeedback" class="hidden mt-3 p-3 rounded-xl text-xs font-bold text-center"></div>
+                `;
+                playSuccessSound();
+            }, totalDuration);
+        }
+
+        function checkWheelAnswer(selectedIdx) {
+            const feedback = document.getElementById('wheelFeedback');
+            if (!feedback || !currentWheelQuestion) return;
+
+            feedback.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-rose-100', 'text-rose-800');
+
+            if (selectedIdx === currentWheelQuestion.ans) {
+                playSuccessSound();
+                confetti({ particleCount: 60, spread: 70 });
+                feedback.classList.add('bg-emerald-100', 'text-emerald-800');
+                feedback.innerHTML = `🎉 Syabas! Jawapan anda betul!`;
+            } else {
+                feedback.classList.add('bg-rose-100', 'text-rose-800');
+                feedback.innerHTML = `❌ Kurang tepat. Sila cuba lagi atau putar roda semula!`;
+            }
+        }
+
+        // --- SIJIL GENERATOR LOGIC ---
+        function generateCertificate() {
+            const name = document.getElementById('certStudentName').value.trim();
+            const school = document.getElementById('certSchoolName').value.trim();
+
+            if (!name) {
+                alert("Sila masukkan Nama Penuh Murid!");
+                return;
+            }
+
+            document.getElementById('outStudentName').textContent = name.toUpperCase();
+            document.getElementById('outSchoolName').textContent = school ? school.toUpperCase() : "SK TAMAN MURNI";
+            document.getElementById('certDate').textContent = new Date().getFullYear();
+
+            const card = document.getElementById('certificateCard');
+            card.classList.remove('hidden');
+            playSuccessSound();
+            confetti({ particleCount: 100, spread: 90 });
+            card.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
